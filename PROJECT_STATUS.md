@@ -2,13 +2,13 @@
 
 ## Goal and current phase
 
-Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: implementation. Done means official-spec discovery, arbitrary authenticated requests including uploads, safety gates, passing CI checks, Opus 4.8 QA approval, global activation and a live read-only ClickUp smoke test.
+Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: public-repository onboarding and authenticated activation. Core implementation and staging QA are complete. Done means the public repository follows the branch model, the global package passes a live authenticated read-only ClickUp smoke test, and QA promotes staging to production.
 
 ## Source of truth
 
 | Area | Source |
 |---|---|
-| Code, specs, checks | This repository |
+| Code, specs, checks | `https://github.com/Insightive-software/pi-clickup-extension` and this local checkout |
 | API contract | Official ClickUp v2/v3 OpenAPI specifications |
 | Coordination | `PROJECT_STATUS.md` |
 | Published project notes | Obsidian `03 Projects/PiClickUp/` |
