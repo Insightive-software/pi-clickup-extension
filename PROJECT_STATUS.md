@@ -2,7 +2,7 @@
 
 ## Goal and current phase
 
-Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: production promotion. Core implementation, public-repository onboarding, staging QA, global installation, and the authenticated read-only ClickUp smoke test are complete. Done means Opus QA promotes staging to production and the public repository uses `production` as its default branch.
+Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: operational maintenance. Core implementation, public-repository onboarding, Opus 4.8 QA, global installation, authenticated read-only validation, production promotion, and public CI are complete. The public repository uses `production` as its default branch.
 
 ## Source of truth
 
@@ -41,9 +41,8 @@ Ponytail full, enforced by `AGENTS.md` and QA. Security, trust-boundary validati
 
 ## Standing tasks
 
-- Production promotion: ready; authenticated global smoke test passed on 2026-07-14.
-- Public remote alignment: push all three branches and set `production` as default after QA promotion.
 - Maintenance: run `npm run verify`, Opus review, staging validation, then production promotion for every release.
+- OpenAPI drift: no scheduled work; `clickup_docs` loads ClickUp's official specifications at runtime.
 
 ## Model assignment
 
