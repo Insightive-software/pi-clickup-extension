@@ -7,6 +7,7 @@ import {
   ClickUpApiError,
   buildUrl,
   extractOperations,
+  getToken,
   normalizeApiPath,
   operationDetail,
   requestClickUp,
@@ -35,6 +36,20 @@ test("normalizes only ClickUp v2/v3 API paths and serializes arrays", async () =
     },
   }));
   assert.equal(fetched, false);
+});
+
+test("prefers the owner-only token file over the legacy API key", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "pi-clickup-token-test-"));
+  const path = join(directory, "token");
+  await writeFile(path, "file-token\n", { mode: 0o600 });
+  const previous = process.env.CLICKUP_API_KEY;
+  process.env.CLICKUP_API_KEY = "stale-legacy-token";
+  try {
+    assert.equal(await getToken(path), "file-token");
+  } finally {
+    if (previous === undefined) delete process.env.CLICKUP_API_KEY;
+    else process.env.CLICKUP_API_KEY = previous;
+  }
 });
 
 test("sends authenticated JSON and parses responses", async () => {

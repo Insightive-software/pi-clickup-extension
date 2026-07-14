@@ -69,17 +69,19 @@ export class ClickUpApiError extends Error {
   }
 }
 
-export async function getToken(): Promise<string> {
-  const token = process.env.CLICKUP_API_TOKEN ?? process.env.CLICKUP_TOKEN ?? process.env.CLICKUP_API_KEY;
+export async function getToken(tokenPath = resolve(homedir(), ".config/cu/token")): Promise<string> {
+  const token = process.env.CLICKUP_API_TOKEN ?? process.env.CLICKUP_TOKEN;
   if (token?.trim()) return token.trim();
 
   try {
-    const saved = (await readFile(resolve(homedir(), ".config/cu/token"), "utf8")).trim();
+    const saved = (await readFile(tokenPath, "utf8")).trim();
     if (saved) return saved;
   } catch {
     // The setup error below is clearer than a filesystem error.
   }
 
+  const legacyToken = process.env.CLICKUP_API_KEY;
+  if (legacyToken?.trim()) return legacyToken.trim();
   throw new Error("ClickUp token not configured. Run `cu token` locally or set CLICKUP_API_TOKEN.");
 }
 
