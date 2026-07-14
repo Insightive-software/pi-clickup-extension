@@ -11,6 +11,7 @@ Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with 
 | Code, specs, checks | `https://github.com/umar-rana/pi-clickup-extension` and this local checkout |
 | API contract | Official ClickUp v2/v3 OpenAPI specifications |
 | Coordination | `PROJECT_STATUS.md` |
+| New-Pi onboarding | `NTS-PICU-NewPiHandoff-0001.md` |
 | Published project notes | Obsidian `03 Projects/PiClickUp/` |
 | Tickets | ClickUp after activation |
 | Global runtime | Pi user package `/Users/umar/Develop/PiCode/pi-clickup`; token file `~/.config/cu/token` |

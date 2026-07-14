@@ -4,6 +4,8 @@
 
 Global Pi extension for complete ClickUp Public API v2/v3 access.
 
+New Pis must read `PROJECT_STATUS.md`, `README.md`, and `NTS-PICU-NewPiHandoff-0001.md` before acting.
+
 ## Branches
 
 - `development` → PR/review → `staging` → reviewed promotion → `production`.
