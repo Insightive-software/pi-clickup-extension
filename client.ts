@@ -94,7 +94,12 @@ export function normalizeApiPath(input: string): string {
 }
 
 export function buildUrl(path: string, query: Record<string, QueryValue> = {}): URL {
-  const url = new URL(normalizeApiPath(path), "https://api.clickup.com");
+  const normalized = normalizeApiPath(path);
+  if (/%(?:2e|2f|5c)/i.test(normalized)) throw new Error("Encoded path traversal characters are not allowed.");
+  const url = new URL(normalized, "https://api.clickup.com");
+  if (url.origin !== "https://api.clickup.com" || !/^\/api\/v[23](\/|$)/.test(url.pathname)) {
+    throw new Error("Resolved path must remain under https://api.clickup.com/api/v2 or /api/v3.");
+  }
   for (const [key, value] of Object.entries(query)) {
     const values = Array.isArray(value) ? value : [value];
     for (const item of values) url.searchParams.append(key, item === null ? "" : String(item));

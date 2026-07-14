@@ -14,13 +14,27 @@ import {
   type Fetcher,
 } from "../client.ts";
 
-test("normalizes only ClickUp v2/v3 API paths and serializes arrays", () => {
+test("normalizes only ClickUp v2/v3 API paths and serializes arrays", async () => {
   assert.equal(normalizeApiPath("v2/team"), "/api/v2/team");
   assert.equal(normalizeApiPath("/api/v3/workspaces/1/docs"), "/api/v3/workspaces/1/docs");
   assert.throws(() => normalizeApiPath("https://evil.test/api/v2/team"));
   assert.throws(() => normalizeApiPath("/api/v4/team"));
+  assert.throws(() => buildUrl("/api/v2/../../secret"));
+  assert.throws(() => buildUrl("/api/v2/%2e%2e/%2e%2e/secret"));
+  assert.throws(() => buildUrl("/api/v2/foo%2f..%2f..%2fsecret"));
+  assert.throws(() => buildUrl("/api/v2\\..\\..\\secret"));
   assert.equal(buildUrl("/v2/team/1/task", { "statuses[]": ["open", "done"], archived: false }).toString(),
     "https://api.clickup.com/api/v2/team/1/task?statuses%5B%5D=open&statuses%5B%5D=done&archived=false");
+
+  let fetched = false;
+  await assert.rejects(requestClickUp({ method: "GET", path: "/api/v2/../../secret" }, {
+    token: "secret",
+    fetchImpl: async () => {
+      fetched = true;
+      return new Response("{}");
+    },
+  }));
+  assert.equal(fetched, false);
 });
 
 test("sends authenticated JSON and parses responses", async () => {
