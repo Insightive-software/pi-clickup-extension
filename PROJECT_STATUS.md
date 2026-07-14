@@ -2,7 +2,7 @@
 
 ## Goal and current phase
 
-Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: public-repository onboarding and authenticated activation. Core implementation and staging QA are complete. Done means the public repository follows the branch model, the global package passes a live authenticated read-only ClickUp smoke test, and QA promotes staging to production.
+Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: production promotion. Core implementation, public-repository onboarding, staging QA, global installation, and the authenticated read-only ClickUp smoke test are complete. Done means Opus QA promotes staging to production and the public repository uses `production` as its default branch.
 
 ## Source of truth
 
@@ -13,7 +13,7 @@ Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with 
 | Coordination | `PROJECT_STATUS.md` |
 | Published project notes | Obsidian `03 Projects/PiClickUp/` |
 | Tickets | ClickUp after activation |
-| Global runtime | `~/.pi/agent/extensions/clickup/` after production promotion |
+| Global runtime | Pi user package `/Users/umar/Develop/PiCode/pi-clickup`; token file `~/.config/cu/token` |
 
 ## Team
 
@@ -25,7 +25,7 @@ Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with 
 
 ## Merge authority
 
-The author never merges. Opus 4.8 QA is the sole reviewer-of-record and may merge `development` into `staging` after `npm run verify` passes. If rate-limited, report and pause; no ungated fallback merge.
+The author never merges. Opus 4.8 QA is the sole reviewer-of-record and may merge `development` into `staging`, then promote `staging` into `production`, after checks and activation gates pass. If rate-limited, report and pause; no ungated fallback merge.
 
 ## Branch and verification rules
 
@@ -41,10 +41,9 @@ Ponytail full, enforced by `AGENTS.md` and QA. Security, trust-boundary validati
 
 ## Standing tasks
 
-- QA review: trigger after development commit and checks pass.
-- Global activation: trigger after QA merges to staging.
-- Production promotion: trigger after global no-token and authenticated read-only smoke tests pass.
-- ClickUp tracker entry: trigger once authenticated API access works.
+- Production promotion: ready; authenticated global smoke test passed on 2026-07-14.
+- Public remote alignment: push all three branches and set `production` as default after QA promotion.
+- Maintenance: run `npm run verify`, Opus review, staging validation, then production promotion for every release.
 
 ## Model assignment
 
