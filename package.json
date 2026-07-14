@@ -7,6 +7,14 @@
     "node": ">=22.19.0"
   },
   "keywords": ["pi-package", "clickup"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umar-rana/pi-clickup-extension.git"
+  },
+  "homepage": "https://github.com/umar-rana/pi-clickup-extension#readme",
+  "bugs": {
+    "url": "https://github.com/umar-rana/pi-clickup-extension/issues"
+  },
   "pi": {
     "extensions": [
       "./index.ts"

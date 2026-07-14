@@ -34,7 +34,7 @@ DELETE requests and local-file uploads require interactive confirmation.
 ## Install
 
 ```bash
-pi install git:github.com/Insightive-software/pi-clickup-extension
+pi install git:github.com/umar-rana/pi-clickup-extension
 ```
 
 Restart Pi or run `/reload` after installation.
@@ -42,7 +42,7 @@ Restart Pi or run `/reload` after installation.
 For local development:
 
 ```bash
-git clone https://github.com/Insightive-software/pi-clickup-extension.git
+git clone https://github.com/umar-rana/pi-clickup-extension.git
 cd pi-clickup-extension
 npm install
 pi -e ./index.ts
@@ -50,24 +50,47 @@ pi -e ./index.ts
 
 ## Configure authentication securely
 
-Never paste a ClickUp token into Pi, source code, issues, logs, screenshots, or commits.
+Generate a personal API token in ClickUp: **Avatar → Settings → Apps → API Token → Generate**. Personal use does not require ClickUp's OAuth access-token endpoint.
 
-The recommended setup stores the token outside the repository in an owner-only file:
+Never paste a ClickUp token into Pi, source code, issues, logs, screenshots, or commits. The extension does not include a token; every user supplies their own locally.
+
+### macOS
+
+Copy the token from ClickUp, then run:
 
 ```zsh
 mkdir -p ~/.config/cu
-read -s "clickup_token?ClickUp personal token: "; echo
-(umask 077; printf '%s' "$clickup_token" > ~/.config/cu/token)
-unset clickup_token
+pbpaste > ~/.config/cu/token
 chmod 600 ~/.config/cu/token
+: | pbcopy
 ```
 
-Environment variables are also supported:
+The last command clears the clipboard. Verify owner-only permissions:
+
+```zsh
+ls -l ~/.config/cu/token
+```
+
+The permissions should begin with `-rw-------`.
+
+### Linux with Bash
+
+```bash
+mkdir -p "$HOME/.config/cu"
+read -r -s -p "ClickUp personal token: " clickup_token; echo
+printf '%s' "$clickup_token" > "$HOME/.config/cu/token"
+unset clickup_token
+chmod 600 "$HOME/.config/cu/token"
+```
+
+### Token lookup order
 
 1. `CLICKUP_API_TOKEN`
 2. `CLICKUP_TOKEN`
 3. `~/.config/cu/token`
 4. Legacy fallback: `CLICKUP_API_KEY`
+
+Environment variables are useful when supplied by a trusted secret manager. Do not commit them in `.env` files.
 
 The token is sent only in the `Authorization` header to paths that resolve beneath:
 

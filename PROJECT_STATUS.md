@@ -8,7 +8,7 @@ Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with 
 
 | Area | Source |
 |---|---|
-| Code, specs, checks | `https://github.com/Insightive-software/pi-clickup-extension` and this local checkout |
+| Code, specs, checks | `https://github.com/umar-rana/pi-clickup-extension` and this local checkout |
 | API contract | Official ClickUp v2/v3 OpenAPI specifications |
 | Coordination | `PROJECT_STATUS.md` |
 | Published project notes | Obsidian `03 Projects/PiClickUp/` |
