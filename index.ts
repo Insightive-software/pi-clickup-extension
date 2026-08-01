@@ -99,6 +99,10 @@ export default function clickupExtension(pi: ExtensionAPI) {
       }), { description: "Files for multipart upload." })),
       timeout_ms: Type.Optional(Type.Integer({ minimum: 1_000, maximum: 120_000, description: "Per-attempt timeout; defaults to 30000." })),
     }),
+    // DELETE and file uploads open a blocking confirmation dialog; run one invocation at a
+    // time so two concurrent confirmations in the same turn can't race the same UI dialog
+    // and stall with no visible prompt (see pi-teamwork's identical fix for the same root cause).
+    executionMode: "sequential",
     async execute(_toolCallId, params, signal, _onUpdate, ctx) {
       const method = params.method as HttpMethod;
       if (method === "DELETE") {
