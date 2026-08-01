@@ -12,7 +12,7 @@ All reviewed by the Opus 4.8 QA Pi and promoted through `development → staging
 |---|---|
 | `f8ed446` | Declares `executionMode: "sequential"` on `clickup_api` so Pi's scheduler serializes any tool batch containing it, preventing two same-turn DELETE/upload confirmations from racing the same TUI dialog. |
 | `416de6f` | Adds MIT `LICENSE` and `license` field, removes `private: true`. The repository is public and installed via `pi install git:...`, so absent a license a stranger had no grant to use or modify it. GitHub now reports the license as MIT. |
-| `8fe745d` | Adds a `description` field and aligns `package.json` key order with `pi-teamwork` for cross-extension consistency. |
+| (this commit) | Adds a `description` field and aligns `package.json` key order with `pi-teamwork` for cross-extension consistency. |
 
 Dropping `private: true` removes npm's accidental-publish guardrail. Accepted deliberately: there is no publish step, `publishConfig`, or `NPM_TOKEN` in this repository, distribution is via `pi install git:` rather than the registry, and matching `pi-teamwork`'s shape was the goal. Restore the flag if registry publication is ever ruled out permanently.
 
