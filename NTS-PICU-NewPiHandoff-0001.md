@@ -1,7 +1,7 @@
 # Pi ClickUp — New Pi Handoff
 
-**Handoff date:** 2026-07-14  
-**Status:** Operational; no known blocker
+**Handoff date:** 2026-07-14 (updated 2026-08-01)  
+**Status:** Operational; no code blocker. Automatic CI triggers do not fire — see "Required checks".
 
 ## Read first
 
@@ -35,9 +35,10 @@ Current official coverage is 172 operations: 137 v2 and 35 v3. Do not hand-write
 
 ## Released state
 
-- `development`, `staging`, and `production` were aligned and pushed at handoff.
+- `development`, `staging`, and `production` were aligned and pushed at handoff, and realigned at `f8ed446` on 2026-08-01.
 - GitHub default branch is `production`.
-- Production CI passed after the repository transfer.
+- Production CI passed after the repository transfer, and again after the `f8ed446` promotion (manually dispatched).
+- Release `f8ed446` declares `executionMode: "sequential"` on `clickup_api`. Pi's agent loop runs same-turn tool calls in parallel by default; because `clickup_api` opens a blocking `ctx.ui.confirm()` dialog on DELETE and file uploads, two concurrent confirmations could race the same dialog and stall silently. `pi-agent-core` routes an entire tool batch sequentially when any tool in it declares that mode, so the single declaration covers both confirmation paths. Preventive fix mirroring a real bug fixed in the sibling `pi-teamwork` extension. Do not remove the declaration or its test.
 - Global `clickup_docs` and authenticated read-only `clickup_api GET /v2/user` smoke tests passed.
 - The old extension is preserved but disabled at `~/.pi/agent/extensions/clickup-legacy.ts.disabled`.
 - The stale plaintext `CLICKUP_API_KEY` export was removed from `~/.zshrc`.
@@ -108,7 +109,9 @@ npm run verify
 npm pack --dry-run
 ```
 
-`npm run verify` runs strict TypeScript checking and six Node tests covering path confinement, token precedence, authentication headers, safe retries, multipart uploads, and OpenAPI discovery.
+`npm run verify` runs strict TypeScript checking and seven Node tests covering path confinement, token precedence, authentication headers, safe retries, multipart uploads, OpenAPI discovery, and the `clickup_api` sequential-execution declaration.
+
+**Automatic CI does not fire.** `verify.yml` declares `push` and `pull_request` triggers, but every run in repository history is `workflow_dispatch`; pushes during the `f8ed446` release triggered nothing. Neither `staging` nor `production` has branch protection, so a pull request can show no status checks and still be mergeable. Until this is resolved, the merge gate is manual: run `npm run verify` locally **and** dispatch the workflow explicitly (`gh workflow run verify.yml --ref <branch>`) before approving. Never treat a green pull request page as evidence that CI ran.
 
 For a runtime smoke after Pi/CMUX upgrades:
 

@@ -4,6 +4,8 @@
 
 Build a global Pi extension that replaces unstable ClickUp MCP/API tooling with direct, complete ClickUp Public API v2/v3 control. Current phase: operational maintenance. Core implementation, public-repository onboarding, Opus 4.8 QA, global installation, authenticated read-only validation, production promotion, and public CI are complete. The public repository uses `production` as its default branch.
 
+Latest release `f8ed446` (2026-08-01) declares `executionMode: "sequential"` on `clickup_api` so Pi's scheduler serializes any tool batch containing it, preventing two same-turn DELETE/upload confirmations from racing the same TUI dialog. Reviewed and promoted through `development → staging → production`; all three branches are aligned at `f8ed446`.
+
 ## Source of truth
 
 | Area | Source |
@@ -39,6 +41,12 @@ Default to action on reversible routine choices. Self-report idle or rate-limite
 ## Coding discipline
 
 Ponytail full, enforced by `AGENTS.md` and QA. Security, trust-boundary validation, cancellation and data-loss prevention are not simplification targets.
+
+## Known gap: automatic CI triggers
+
+`.github/workflows/verify.yml` declares `push` and `pull_request` triggers, but neither has ever fired; every run in repository history is `workflow_dispatch`. Pushes to `development`, `staging`, and `production` during the `f8ed446` release produced no automatic run. The workflow is active and Actions are enabled, so the cause is external to the file (suspected account-level policy or repository-transfer artifact) and is under separate investigation.
+
+Neither `staging` nor `production` has branch protection, so no status check is enforced at merge time. Until both are fixed, treat the merge gate as manual: run `npm run verify` locally and dispatch `verify.yml` explicitly before approving.
 
 ## Standing tasks
 
